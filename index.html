@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 PGA Championship Draft Board</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Fixed stylesheet link -->
+    <link href="./styles.css" rel="stylesheet">
+    <script src="./script.js"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-green-800 text-white p-4 shadow-md">
+      <div class="container mx-auto">
+        <h1 class="text-2xl font-bold">PGA Tournament Draft Board</h1>
+        <p class="text-sm opacity-80">Track players and make your selections for golf tournaments</p>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4">
+
+      <!-- Tournament Selection Section -->
+      <section class="bg-white rounded-lg shadow-md p-4 mb-6">
+        <h2 class="text-xl font-bold mb-4">Tournament Selection</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="md:col-span-2">
+            <label for="tournamentSelector" class="block text-sm font-medium text-gray-700 mb-1">Select Tournament</label>
+            <select id="tournamentSelector" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
+              <option value="">-- Select Tournament --</option>
+            </select>
+
+            <div id="tournamentPrompt" class="mt-4 bg-blue-50 p-3 rounded-md text-blue-800 text-sm hidden">
+              <p>Please select a tournament to get started, or create a custom tournament.</p>
+            </div>
+          </div>
+
+          <div class="bg-gray-50 p-3 rounded-md">
+            <div class="text-sm font-medium text-gray-700 mb-1">Current Tournament</div>
+            <div class="font-bold text-lg" id="currentTournament">Not selected</div>
+            <div class="text-sm text-gray-500" id="currentVenue">Select a tournament</div>
+            <div class="mt-2 flex space-x-2">
+              <button id="refreshData" class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded hover:bg-blue-200">
+                Refresh Data
+              </button>
+              <button id="showApiKeyForm" class="text-xs px-2 py-1 bg-gray-100 text-gray-800 rounded hover:bg-gray-200">
+                API Key
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Tournament Form -->
+        <div id="customTournamentPanel" class="mt-4 bg-gray-50 p-4 rounded-md hidden">
+          <h3 class="font-medium text-gray-900 mb-2">Create Custom Tournament</h3>
+          <form id="customTournamentForm">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label for="customTournamentName" class="block text-sm font-medium text-gray-700 mb-1">Tournament Name</label>
+                <input type="text" id="customTournamentName" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="PGA Championship">
+              </div>
+              <div>
+                <label for="customTournamentVenue" class="block text-sm font-medium text-gray-700 mb-1">Venue</label>
+                <input type="text" id="customTournamentVenue" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="Bethpage Black">
+              </div>
+              <div>
+                <label for="customTournamentYear" class="block text-sm font-medium text-gray-700 mb-1">Year</label>
+                <input type="text" id="customTournamentYear" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="2025">
+              </div>
+            </div>
+            <div class="mt-4 flex justify-end">
+              <button type="button" class="mr-2 px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600" onclick="$('#customTournamentPanel').addClass('hidden')">Cancel</button>
+              <button type="submit" class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">Create Tournament</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- API Key Form -->
+        <div id="apiKeyPanel" class="mt-4 bg-gray-50 p-4 rounded-md hidden">
+          <h3 class="font-medium text-gray-900 mb-2">API Key Configuration</h3>
+          <p class="text-sm text-gray-600 mb-3">Enter your Sports Data API key to fetch real tournament data.</p>
+          <form id="apiKeyForm">
+            <div class="flex space-x-2">
+              <input type="text" id="apiKey" class="flex-1 border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="Enter API key">
+              <button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">Save Key</button>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">No API key? The app will use demo data for development.</p>
+          </form>
+        </div>
+      </section>
+
+      <!-- Control Panel -->
+      <section class="bg-white rounded-lg shadow-md p-4 mb-6">
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+          <div class="mb-4 md:mb-0">
+            <h2 class="text-xl font-bold">Draft Control Panel</h2>
+            <p class="text-sm text-gray-600">Manage player selection and participants</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button id="toggleEditMode" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md shadow-sm">
+              Enter Draft Mode
+            </button>
+            <button id="saveChanges" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md shadow-sm hidden">
+              Save Changes
+            </button>
+            <button id="resetDraft" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md shadow-sm hidden">
+              Reset Draft
+            </button>
+            <button id="toggleParticipants" class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-md shadow-sm">
+              Manage Participants
+            </button>
+            <div class="dropdown inline-block relative">
+              <button class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md shadow-sm flex items-center">
+                <span>Export/Import</span>
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div class="dropdown-menu absolute hidden bg-white mt-1 rounded-md shadow-lg z-10 w-48">
+                <button id="exportCSV" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  Export to CSV
+                </button>
+                <label for="importCSV" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  Import from CSV
+                </label>
+                <input id="importCSV" type="file" accept=".csv" class="hidden">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Participant Form -->
+        <div id="addParticipantForm" class="mt-4 p-4 bg-gray-50 rounded-md hidden">
+          <h3 class="font-medium mb-2">Add Participant</h3>
+          <div class="flex space-x-2">
+            <input type="text" id="newParticipantName" class="flex-1 border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm" placeholder="Participant name">
+            <button id="addParticipant" class="px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700">Add</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Manual Player Add Form -->
+      <section id="manualPlayerPanel" class="bg-white rounded-lg shadow-md p-4 mb-6 hidden">
+        <h3 class="font-medium text-gray-900 mb-2">Add Player Manually</h3>
+        <p class="text-sm text-gray-600 mb-3">Add players when API data is not available or for custom tournaments.</p>
+        <form id="manualPlayerForm">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="md:col-span-2">
+              <label for="manualPlayerName" class="block text-sm font-medium text-gray-700 mb-1">Player Name</label>
+              <input type="text" id="manualPlayerName" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="Tiger Woods" required>
+            </div>
+            <div>
+              <label for="manualPlayerNationality" class="block text-sm font-medium text-gray-700 mb-1">Nationality</label>
+              <input type="text" id="manualPlayerNationality" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="USA">
+            </div>
+            <div>
+              <label for="manualPlayerOdds" class="block text-sm font-medium text-gray-700 mb-1">Odds</label>
+              <input type="text" id="manualPlayerOdds" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="+5000">
+            </div>
+          </div>
+          <div class="mt-3">
+            <label for="manualPlayerInfo" class="block text-sm font-medium text-gray-700 mb-1">Player Info</label>
+            <textarea id="manualPlayerInfo" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm" rows="2" placeholder="Brief player description or achievements"></textarea>
+          </div>
+          <div class="mt-4 flex justify-end">
+            <button type="submit" class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">Add Player</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Draft Stats -->
+      <section id="draftStatsSection" class="bg-white rounded-lg shadow-md p-4 mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold">Draft Statistics</h2>
+          <button id="toggleStats" class="text-sm text-blue-600 hover:text-blue-800">Hide Stats</button>
+        </div>
+        <div id="draftStats" class="text-sm">
+          <!-- Stats will be rendered here -->
+          <div class="text-center py-4 text-gray-500">
+            Select a tournament and add participants to view statistics
+          </div>
+        </div>
+      </section>
+
+      <!-- Player Filter and Stats -->
+      <section class="bg-white rounded-lg shadow-md p-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <!-- Search and Filters -->
+          <div class="md:col-span-2">
+            <div class="flex flex-col md:flex-row md:space-x-4">
+              <div class="flex-1 mb-3 md:mb-0">
+                <label for="playerSearch" class="block text-sm font-medium text-gray-700 mb-1">Search Players</label>
+                <input type="text" id="playerSearch" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="Search by name or nationality">
+              </div>
+              <div class="w-full md:w-1/4 mb-3 md:mb-0">
+                <label for="sortBy" class="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+                <select id="sortBy" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                  <option value="rank">Rank</option>
+                  <option value="odds">Odds</option>
+                  <option value="name">Name</option>
+                </select>
+              </div>
+              <div class="w-full md:w-1/4">
+                <label for="filterBy" class="block text-sm font-medium text-gray-700 mb-1">Show</label>
+                <select id="filterBy" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                  <option value="all">All Players</option>
+                  <option value="available">Available Only</option>
+                  <option value="selected">Selected Only</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Draft Status -->
+          <div class="bg-gray-50 p-3 rounded-md">
+            <h3 class="font-medium text-gray-900 mb-2">Draft Status</h3>
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <div class="text-sm text-gray-600">Total</div>
+                <div class="font-bold" id="totalPlayers">0</div>
+              </div>
+              <div>
+                <div class="text-sm text-gray-600">Selected</div>
+                <div class="font-bold text-green-600" id="playersSelected">0</div>
+              </div>
+              <div>
+                <div class="text-sm text-gray-600">Available</div>
+                <div class="font-bold text-blue-600" id="playersAvailable">0</div>
+              </div>
+            </div>
+            <div class="text-xs text-gray-500 mt-2">
+              Last updated: <span id="updateTime">Never</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="flex justify-center items-center py-8 hidden">
+          <svg class="animate-spin h-8 w-8 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span class="ml-2 text-gray-700">Loading players...</span>
+        </div>
+
+        <!-- Player Grid -->
+        <div id="playerGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
+          <!-- Players will be rendered here -->
+          <div class="col-span-full text-center py-8 text-gray-500">
+            Select a tournament to view players
+          </div>
+        </div>
+      </section>
+
+      <!-- Two Column Layout for Participants -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Participants List -->
+        <section class="bg-white rounded-lg shadow-md p-4 md:col-span-1">
+          <h2 class="text-xl font-bold mb-4">Participants</h2>
+          <div id="participantsList" class="space-y-3">
+            <!-- Participants will be rendered here -->
+            <div class="text-center py-4 text-gray-500">
+              No participants added yet
+            </div>
+          </div>
+        </section>
+
+        <!-- Selected Players By Participant -->
+        <section class="bg-white rounded-lg shadow-md p-4 md:col-span-2">
+          <h2 class="text-xl font-bold mb-4">Selections By Participant</h2>
+          <div id="participantSelections" class="overflow-x-auto">
+            <!-- Selection table will be rendered here -->
+            <div class="text-center py-4 text-gray-500">
+              Add participants and make selections to view details
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Participant Selection Modal -->
+    <div id="participantModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-lg p-6 max-w-md w-full">
+        <h3 class="text-lg font-bold mb-4">Select Player</h3>
+        <p class="mb-4">You're selecting <span id="selectedPlayerName" class="font-medium"></span>. Which participant should get this player?</p>
+
+        <div id="participantOptions" class="space-y-2 mb-6">
+          <!-- Options will be rendered here -->
+        </div>
+
+        <div class="flex justify-end space-x-3">
+          <button id="cancelSelection" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md">Cancel</button>
+          <button id="confirmSelection" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-4 mt-8">
+      <div class="container mx-auto text-center text-sm">
+        <p>PGA Tournament Draft Board &copy; 2025</p>
+        <p class="text-gray-400 text-xs mt-1">Enhanced with dynamic player data loading and tournament selection</p>
+      </div>
+    </footer>
+
+    <!-- Script -->
+    <script src="script.js"></script>
+
+    <script>
+      // Quick dropdown functionality (could be moved to script.js)
+      document.addEventListener('click', function(e) {
+        const dropdown = document.querySelector('.dropdown');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+
+        if (dropdown && dropdown.contains(e.target)) {
+          dropdownMenu.classList.toggle('hidden');
+        } else if (dropdownMenu && !dropdownMenu.classList.contains('hidden')) {
+          dropdownMenu.classList.add('hidden');
+        }
+      });
+
+      // Export/Import handlers
+      document.getElementById('exportCSV').addEventListener('click', function() {
+        exportToCSV();
+      });
+
+      document.getElementById('importCSV').addEventListener('change', function(e) {
+        if (e.target.files.length > 0) {
+          importFromCSV(e.target.files[0]);
+          e.target.value = ''; // Reset file input
+        }
+      });
+
+      // Toggle statistics view
+      document.getElementById('toggleStats').addEventListener('click', function() {
+        const statsDiv = document.getElementById('draftStats');
+        const toggleBtn = document.getElementById('toggleStats');
+
+        if (statsDiv.classList.contains('hidden')) {
+          statsDiv.classList.remove('hidden');
+          toggleBtn.textContent = 'Hide Stats';
+        } else {
+          statsDiv.classList.add('hidden');
+          toggleBtn.textContent = 'Show Stats';
+        }
+      });
+    </script>
+  </body>
+  </html>

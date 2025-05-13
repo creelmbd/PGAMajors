@@ -1,0 +1,518 @@
+/* Dark Theme for PGA Tournament Draft Board */
+
+/* Base styles */
+body {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+header {
+  background-color: #0a441d !important; /* Darker green header */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Section containers */
+.bg-white {
+  background-color: #1e1e1e !important;
+  color: #f0f0f0;
+  border: 1px solid #333;
+}
+
+.shadow-md {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+/* Text colors */
+.text-gray-600, .text-gray-700 {
+  color: #b0b0b0 !important;
+}
+
+.text-gray-500 {
+  color: #909090 !important;
+}
+
+.text-gray-900 {
+  color: #f0f0f0 !important;
+}
+
+/* Buttons */
+.bg-blue-500, .bg-blue-600 {
+  background-color: #0466c8 !important;
+}
+
+.bg-blue-500:hover, .bg-blue-600:hover {
+  background-color: #0353a4 !important;
+}
+
+.bg-green-500, .bg-green-600 {
+  background-color: #00853d !important;
+}
+
+.bg-green-500:hover, .bg-green-600:hover {
+  background-color: #00a050 !important;
+}
+
+.bg-purple-500, .bg-purple-600 {
+  background-color: #7b2cbf !important;
+}
+
+.bg-purple-500:hover, .bg-purple-600:hover {
+  background-color: #6a24a7 !important;
+}
+
+.bg-red-500, .bg-red-600 {
+  background-color: #d62828 !important;
+}
+
+.bg-red-500:hover, .bg-red-600:hover {
+  background-color: #ba2020 !important;
+}
+
+.bg-gray-500, .bg-gray-600 {
+  background-color: #444444 !important;
+}
+
+.bg-gray-500:hover, .bg-gray-600:hover {
+  background-color: #555555 !important;
+}
+
+/* Input fields */
+input, select, textarea {
+  background-color: #2d2d2d !important;
+  color: #f0f0f0 !important;
+  border: 1px solid #444 !important;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #00b050 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(0, 176, 80, 0.25) !important;
+}
+
+/* Player cards */
+.player-card {
+  transition: all 0.3s ease;
+  background-color: #1e1e1e;
+  border: 1px solid #333333;
+}
+
+.player-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 150, 70, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+.player-card.selected {
+  background-color: #213d29;
+  border-left: 4px solid #00b050;
+}
+
+.claimed {
+  opacity: 0.75;
+  text-decoration: line-through;
+  color: #b0b0b0;
+}
+
+/* Tournament selection section */
+#currentTournament {
+  color: #4cdf83;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+#currentVenue {
+  color: #b0b0b0;
+}
+
+/* Dropdown */
+.dropdown-menu {
+  background-color: #2d2d2d !important;
+  border: 1px solid #444;
+}
+
+.dropdown-menu button:hover {
+  background-color: #3d3d3d !important;
+}
+
+/* Stats section */
+.bg-blue-100 {
+  background-color: #0f2942 !important;
+  border: 1px solid #0466c8 !important;
+}
+
+.bg-green-100 {
+  background-color: #0f422a !important;
+  border: 1px solid #00853d !important;
+}
+
+.bg-purple-100 {
+  background-color: #2c1c46 !important;
+  border: 1px solid #7b2cbf !important;
+}
+
+.text-blue-800 {
+  color: #90c2ff !important;
+}
+
+.text-green-800 {
+  color: #4cdf83 !important;
+}
+
+.text-purple-800 {
+  color: #d4a6ff !important;
+}
+
+/* Tables */
+table {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+thead tr {
+  background-color: #2d2d2d !important;
+}
+
+tbody tr:hover {
+  background-color: #2d2d2d !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 77, 36, 0.2);
+}
+
+.border-b {
+  border-color: #333 !important;
+}
+
+/* Player selection buttons */
+.select-player {
+  background-color: #1e3d29 !important;
+  color: #ffffff !important;
+  border-color: #00b050 !important;
+  font-weight: 600;
+}
+
+.select-player:hover {
+  background-color: #2a5738 !important;
+}
+
+.deselect-player {
+  background-color: #3d1e1e !important;
+  color: #ffffff !important;
+  border-color: #b05050 !important;
+  font-weight: 600;
+}
+
+.deselect-player:hover {
+  background-color: #572a2a !important;
+}
+
+/* Footer */
+footer {
+  background-color: #0a2e0a !important;
+}
+
+/* Player info tooltip */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: 250px;
+  background-color: #2d2d2d;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 8px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -125px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Modal */
+#participantModal {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+#participantModal > div {
+  background-color: #1e1e1e !important;
+  border: 1px solid #333;
+}
+
+/* Custom color text */
+.text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800 {
+  color: #3d85c6 !important;
+}
+
+.text-green-500, .text-green-600, .text-green-700, .text-green-800 {
+  color: #4cdf83 !important;
+}
+
+.text-red-500, .text-red-600, .text-red-700, .text-red-800 {
+  color: #ff6b6b !important;
+}
+
+/* Hide Stats button */
+#toggleStats, #toggleStats:hover {
+  color: #3d85c6 !important;
+}
+
+/* Badges */
+.bg-gray-200 {
+  background-color: #2a472a !important;
+  color: #ffffff !important;
+}
+
+/* Secondary containers */
+.bg-gray-50 {
+  background-color: #252525 !important;
+  border: 1px solid #333;
+}
+
+.bg-gray-100 {
+  background-color: #121212 !important;
+}
+
+.bg-gray-200, .bg-gray-300 {
+  background-color: #2d2d2d !important;
+  color: #ffffff !important;
+}
+
+/* Notification styles */
+.notification {
+  background-color: #1e1e1e !important;
+  border: 1px solid #333;
+  color: #f0f0f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.notification.success {
+  border-left: 4px solid #00853d;
+}
+
+.notification.error {
+  border-left: 4px solid #d62828;
+}
+
+.notification.warning {
+  border-left: 4px solid #f59e0b;
+}
+
+.notification.info {
+  border-left: 4px solid #0466c8;
+}
+
+/* Form container backgrounds */
+#customTournamentPanel, #apiKeyPanel, #addParticipantForm {
+  background-color: #252525 !important;
+  border: 1px solid #333;
+}
+
+/* Loading indicator */
+#loadingIndicator {
+  background-color: rgba(30, 30, 30, 0.8);
+  border-radius: 0.5rem;
+}
+
+/* Draft Stats Styling */
+#draftStatsSection {
+  border-top: 2px solid #0a441d;
+}
+
+/* Stats Cards */
+.bg-blue-100, .bg-green-100, .bg-purple-100 {
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-blue-100::after, .bg-green-100::after, .bg-purple-100::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 25%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.05));
+  pointer-events: none;
+}
+
+/* Tournament buttons styling */
+#refreshData {
+  background-color: #0f2942 !important;
+  color: #90c2ff !important;
+  border: 1px solid #0466c8;
+}
+
+#refreshData:hover {
+  background-color: #173d5e !important;
+}
+
+#showApiKeyForm {
+  background-color: #252525 !important;
+  color: #d0d0d0 !important;
+  border: 1px solid #444;
+}
+
+#showApiKeyForm:hover {
+  background-color: #303030 !important;
+}
+
+/* Focus states for accessibility */
+button:focus, select:focus, input:focus, a:focus, textarea:focus {
+  outline: 2px solid rgba(0, 176, 80, 0.5);
+  outline-offset: 2px;
+}
+
+/* Participant options in the modal */
+#participantOptions {
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+  padding: 1rem 0;
+}
+
+#participantOptions input[type="radio"] {
+  accent-color: #00853d;
+}
+
+/* Highlight selected participant */
+#participantOptions label:hover {
+  color: #4cdf83;
+}
+
+/* Styling for odds badge */
+.player-card .font-bold.bg-gray-200.rounded {
+  background-color: #1e3d29 !important;
+  border: 1px solid #00853d;
+  color: #4cdf83 !important;
+}
+
+/* Improve visual hierarchy */
+h1, h2, h3, h4 {
+  color: #ffffff;
+}
+
+.font-bold {
+  color: #ffffff;
+}
+
+/* Properly styled checkboxes */
+input[type="checkbox"] {
+  accent-color: #00853d;
+}
+
+/* Placeholder text color */
+::placeholder {
+  color: #777 !important;
+  opacity: 1;
+}
+
+/* Player grid container */
+#playerGrid {
+  min-height: 200px;
+  position: relative;
+}
+
+/* Add subtle grid lines */
+#participantSelections table {
+  border-collapse: collapse;
+}
+
+#participantSelections table th,
+#participantSelections table td {
+  border: 1px solid #333;
+  padding: 0.5rem 0.75rem;
+}
+
+#participantSelections table th {
+  background-color: #0a441d;
+  color: white;
+  font-weight: 600;
+}
+
+/* Tournament prompt panel */
+#tournamentPrompt {
+  background-color: #0f2942 !important;
+  border: 1px solid #0466c8;
+  color: #90c2ff !important;
+}
+
+/* Subtle transitions */
+button, .player-card, input, select {
+  transition: all 0.2s ease-in-out;
+}
+
+/* No participants or players messages */
+.text-center.py-4.text-gray-500 {
+  background-color: #252525;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  color: #909090 !important;
+  border: 1px dashed #444;
+}
+
+/* Add action buttons styling */
+#addParticipant, #confirmSelection {
+  position: relative;
+  overflow: hidden;
+}
+
+#addParticipant::after, #confirmSelection::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+#addParticipant:hover::after, #confirmSelection:hover::after {
+  left: 100%;
+}
+
+/* Fix any blue links */
+a {
+  color: #3d85c6;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #90c2ff;
+  text-decoration: underline;
+}
+
+/* Stats section headers */
+#draftStats h3 {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #333;
+  margin-bottom: 1rem;
+}
+
+/* Improve dropdown visuals */
+select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2380CBC4' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+  appearance: none;
+}
