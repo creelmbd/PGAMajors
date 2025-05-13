@@ -23,7 +23,7 @@ const app = {
   },
   api: {
     baseUrl: "https://api.sportsdata.io/golf/v2/json",
-    apiKey: "270a305674b3499ea5e6e21a6c5169fd", // You would set this in the UI
+    apiKey: "", // You would set this in the UI
     endpoints: {
       leaderboard: "/Leaderboard/{tournamentId}",
       playersByTournament: "/PlayersByTournament/{tournamentId}",
