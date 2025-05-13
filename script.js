@@ -257,34 +257,13 @@ function fetchTournamentPlayers() {
 }
 
 // Fetch players from API
+// In script.js, modify the fetchPlayersFromApi function
 function fetchPlayersFromApi() {
   app.ui.loading = true;
   updateLoadingUI(true);
 
   const tournamentId = app.tournaments.current.id;
   const apiUrl = `${app.api.baseUrl}${app.api.endpoints.playersByTournament.replace('{tournamentId}', tournamentId)}`;
-
-  // Use a CORS proxy for development
-  const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-
-  $.ajax({
-    url: proxyUrl + apiUrl,
-    headers: {
-      "Ocp-Apim-Subscription-Key": app.api.apiKey
-    },
-    success: function(data) {
-      processPlayerData(data);
-    },
-    error: function(xhr, status, error) {
-      console.error("API Error:", error);
-      showNotification("Error fetching player data. Falling back to demo data.", "error");
-      fetchDemoPlayers();
-    },
-    complete: function() {
-      app.ui.loading = false;
-      updateLoadingUI(false);
-    }
-  });
 }
 
 // Fetch demo players when API is not available
