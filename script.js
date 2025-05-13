@@ -258,12 +258,55 @@ function fetchTournamentPlayers() {
 
 // Fetch players from API
 // In script.js, modify the fetchPlayersFromApi function
+// Replace the incomplete fetchPlayersFromApi function with this complete implementation
 function fetchPlayersFromApi() {
   app.ui.loading = true;
   updateLoadingUI(true);
 
   const tournamentId = app.tournaments.current.id;
-  const apiUrl = `${app.api.baseUrl}${app.api.endpoints.playersByTournament.replace('{tournamentId}', tournamentId)}`;
+  const apiUrl = `${app.api.baseUrl}${app.api.endpoints.playersByTournament.replace('{tournamentId}', tournamentId)}?key=${app.api.apiKey}`;
+
+  // Show loading notification
+  showNotification(`Loading players for ${app.tournaments.current.name}...`, "info");
+
+  // Make the fetch request
+  fetch(apiUrl)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`API request failed with status ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (Array.isArray(data) && data.length > 0) {
+        processPlayerData(data);
+      } else {
+        throw new Error("No player data returned from API");
+      }
+    })
+    .catch(error => {
+      console.error("Error fetching players from API:", error);
+      showNotification("Could not load data from API, using demo data instead", "warning");
+      // Fall back to demo data if API fails
+      fetchDemoPlayers();
+    })
+    .finally(() => {
+      app.ui.loading = false;
+      updateLoadingUI(false);
+    });
+}
+
+// Also improve the updateLoadingUI function to be more robust
+function updateLoadingUI(isLoading) {
+  if (isLoading) {
+    $("#loadingIndicator").removeClass("hidden");
+    $("#playerGrid").addClass("opacity-50");
+  } else {
+    setTimeout(() => {
+      $("#loadingIndicator").addClass("hidden");
+      $("#playerGrid").removeClass("opacity-50");
+    }, 500); // Small delay to ensure UI updates smoothly
+  }
 }
 
 // Fetch demo players when API is not available
